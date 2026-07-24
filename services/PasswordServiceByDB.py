@@ -19,3 +19,18 @@ def get_user(key: str):
     for entity in list_of_entiry:
         if entity["key"] == key:
             return entity;
+def backup():
+    singleton_config.delete_all_password("password_backup")
+    list_of_dict = singleton_config.retrieve_all_passwords()
+    for item in list_of_dict:
+        singleton_config.add_password(item["key"], item["username"], item["password"], item["description"],"password_backup")
+def export():
+    list_of_dict = singleton_config.retrieve_all_passwords()
+    return json.dumps(list_of_dict)
+def import_password(content):
+    list_of_dict = json.loads(content)
+    singleton_config.delete_all_password()
+    for item in list_of_dict:
+        print(f"adding {item}")
+        singleton_config.add_password(item["key"], item["username"], item["password"], item["description"])
+    return json.dumps(list_of_dict)

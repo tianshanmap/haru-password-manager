@@ -4,7 +4,11 @@ from models.web import PasswordItem
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.PasswordDataManager import singleton_config
-
+from utils.encryption import *
+from pathlib import Path
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import StreamingResponse
+import utils.files
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -13,28 +17,21 @@ app.add_middleware(
     allow_methods=["*"],  # Automatically responds to OPTIONS requests for these methods
     allow_headers=["*"],
 )
-items = singleton_config.retrieve_all_passwords()
-print(items)
-print(type(items))
-# singleton_config.create_table()
-# singleton_config.add_password("key001","1","2","3")
-# singleton_config.add_password("key002","1","2","3")
-# singleton_config.add_password("key003","1","2","3")
-# singleton_config.update_password("key001","11","21","31")
-# singleton_config.delete_password("key001")
-# item = singleton_config.retrieve_password("key002")
-# if item != None:
-#     print(item)
-#     key,username,password,description = item
-#     print(password)
-# item = singleton_config.retrieve_password("key001")
-# print(item)
-# singleton_config.add_password("key001","neil","meiyou","test")
-# singleton_config.add_password("key002","neil","meiyou","test")
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+singleton_config.create_table()
+singleton_config.create_table_backup()
+key = get_secret()
+print("secret_key=")
+print(key)
+item = "are you happy today ?"
+encrypted_string = encrypt_string(key, item)
+print("encrypted_string=")
+print(encrypted_string)
+decrypted_string = decrypt_string(key, encrypted_string)
+print("decrypted_string=")
+print(decrypted_string)
 
-@app.get("/")
-def main():
-    return {"message": "Hello World"}
 
 def createResponse(content,contentType="application/json"):
     headers = {
@@ -72,3 +69,45 @@ async def delete_password(key: str):
     print("Delete Password")
     ServiceManager.delete_user(key)
     return createResponse(ServiceManager.list_users())
+
+@app.get("/password/backup")
+async def backup_password():
+    ServiceManager.backup()
+    return createResponse(ServiceManager.list_users())
+
+@app.get("/password/export")
+async def export_password():
+    password = ServiceManager.export_password()
+    password = encrypt_string(get_secret(), password)
+    target_file = utils.files.write_export_file("export","export.txt", password)
+    # Set headers to force download and name the file
+    headers = {
+        "Content-Disposition": f"attachment; filename=password.txt"
+    }
+
+    # Return StreamingResponse with the chunk generator
+    return StreamingResponse(
+        utils.files.file_chunk_generator(target_file),
+        headers=headers,
+        media_type="application/octet-stream"
+    )
+
+@app.post("/password/import")
+async def import_file(file: UploadFile = File(...)):
+    # Optional: Validate file extensions/types
+    print(file.content_type)
+    if file.content_type not in ["text/plain"]:
+        raise HTTPException(status_code=415, detail="Unsupported file type")
+
+    destination = UPLOAD_DIR / file.filename
+
+    # Read and save file in chunks to minimize memory overhead
+    with open(destination, "wb") as buffer:
+        while chunk := await file.read(1024 * 1024):  # 1MB chunks
+            buffer.write(chunk)
+    content = utils.files.read_file(destination)
+    decrypted_string = decrypt_string(get_secret(), content)
+    ServiceManager.import_password(decrypted_string)
+    return createResponse(ServiceManager.list_users())
+
+

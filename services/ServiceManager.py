@@ -1,6 +1,5 @@
 from services import PasswordServiceByDB
 from services import PasswordServiceByFile
-
 isDB = True
 def create_user(item) -> str:
     if isDB:
@@ -22,3 +21,13 @@ def list_users():
         return PasswordServiceByDB.list_users()
     else:
         return PasswordServiceByFile
+def backup():
+    if isDB:
+        return PasswordServiceByDB.backup()
+def export_password():
+    if isDB:
+        return PasswordServiceByDB.export()
+def import_password(content):
+    if isDB:
+        return PasswordServiceByDB.import_password(content)
+

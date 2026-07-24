@@ -1,0 +1,1 @@
+curl -F "file=@/Users/developer/T9/travels/processed/174-alison/jpeg/20251130_225239.jpeg" http://localhost:9083/password/import

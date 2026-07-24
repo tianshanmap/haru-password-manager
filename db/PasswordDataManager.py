@@ -37,23 +37,35 @@ class PasswordDataManager:
                 );
             """)
             self.connection.commit()  # Commit changes to save them
-        print("Table Successfully created.")
+        print("Table password Successfully created.")
+    def create_table_backup(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS password_backup (
+                    key TEXT PRIMARY KEY,
+                    username TEXT NOT NULL,
+                    password TEXT NOT NULL,
+                    description TEXT
+                );
+            """)
+            self.connection.commit()  # Commit changes to save them
+        print("Table password_backup Successfully created.")
 
-    def add_password(self, key,username, password, description):
-        item = self.retrieve_password(key)
+    def add_password(self, key,username, password, description,table="password"):
+        item = self.retrieve_password(key,table)
         if item == None:
             with self.connection.cursor() as cursor:
                 cursor.execute("""
-                INSERT INTO password (key,username, password, description)
+                INSERT INTO {} (key,username, password, description)
                 VALUES (%s,%s, %s, %s)
-                """, (key,username, password, description))
+                """.format(table), (key,username, password, description))
                 self.connection.commit()
-    def retrieve_password(self, key):
+    def retrieve_password(self, key,table="password"):
         print("Query password table with key=" + key)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT * FROM password WHERE key = %s
-            """,(key,))
+            SELECT * FROM {} WHERE key = %s
+            """.format(table),(key,))
             # rows = cursor.fetchall()
             # for row in rows:
             #     print(row)
@@ -78,6 +90,12 @@ class PasswordDataManager:
             cursor.execute("""
             DELETE FROM password WHERE key = %s
             """,(key,))
+            self.connection.commit()
+    def delete_all_password(self,table="password"):
+        with self.connection.cursor() as cursor:
+            cursor.execute("""
+            DELETE FROM {}
+            """.format(table))
             self.connection.commit()
 
 # Instantiate the single, shared instance here
