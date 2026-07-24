@@ -64,7 +64,7 @@ class PasswordDataManager:
     def retrieve_all_passwords(self):
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT key,username,password,description FROM password
+            SELECT key,username,password,description FROM password order by key
             """)
             return self.convert_to_list(("key","username","password","description"),cursor.fetchall())
     def update_password(self, key, username, password, description):
