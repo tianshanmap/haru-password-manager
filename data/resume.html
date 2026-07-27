@@ -1,0 +1,325 @@
+GG
+Copy
+Share
+Explain PDF export limitation and suggest alternatives to user
+I cannot generate or export PDF files — my file creation is limited to charts and data outputs only.
+However, here are the quickest ways to get this into PDF format:
+Option 1: Print to PDF (Easiest)
+Copy the plain text resume I provided above.
+Paste it into Microsoft Word or Google Docs.
+Format as needed, then go to File > Print and select "Save as PDF" (or File > Download > PDF in Google Docs).
+Option 2: Use a Free Online Converter
+Paste the resume text into any free online Markdown-to-PDF or text-to-PDF converter.
+Option 3: I Reformat as HTML
+I can provide the resume as clean HTML/CSS. You can save it as an .html file, open it in your browser, and use Ctrl+P / Cmd+P > Save as PDF.
+Would you like me to provide the HTML version, or is the plain text + Word/Google Docs route sufficient?
+ok, export it as HTML then
+Edit
+Copy
+Share
+Export Resume as HTML and Save to Output Directory
+Execute Python code
+Think
+Your HTML resume is ready! You can download it here:
+Neil Wu - Resume (HTML)
+To convert it to PDF:
+Download the HTML file using the link above.
+Open it in any web browser (Chrome, Edge, Safari, etc.).
+Press Ctrl + P (Windows) or Cmd + P (Mac).
+Select "Save as PDF" as the destination.
+Click Save.
+The resume is styled to look clean and professional both on screen and when printed to PDF. Let me know if you need any adjustments!
+High demand. Switched to K2.6 Instant for speed. Upgrade to use K2.6 Thinking.
+
+
+Instant
+High
+Neil_Wu_Resume.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neil Wu - Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 50px 55px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2c5282;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            font-size: 32px;
+            color: #2c5282;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .header .title {
+            font-size: 15px;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .header .contact {
+            font-size: 13px;
+            color: #666;
+        }
+        .header .contact span {
+            margin: 0 10px;
+        }
+        h2 {
+            font-size: 16px;
+            color: #2c5282;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-top: 28px;
+            margin-bottom: 14px;
+        }
+        .summary {
+            text-align: justify;
+            font-size: 14px;
+            color: #444;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            font-size: 13px;
+        }
+        .skills-grid .col h3 {
+            font-size: 13px;
+            color: #2c5282;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .skills-grid .col p {
+            color: #555;
+            line-height: 1.7;
+        }
+        .cert-list, .edu-list {
+            font-size: 13.5px;
+            color: #444;
+            padding-left: 20px;
+        }
+        .cert-list li, .edu-list li {
+            margin-bottom: 5px;
+        }
+        .job {
+            margin-bottom: 22px;
+        }
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .job-header .company {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c5282;
+        }
+        .job-header .location {
+            font-size: 12px;
+            color: #777;
+        }
+        .job-title-line {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .job-desc {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .job ul {
+            padding-left: 22px;
+            font-size: 13px;
+            color: #444;
+        }
+        .job ul li {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .divider {
+            border: none;
+            border-top: 1px dashed #cbd5e0;
+            margin: 18px 0;
+        }
+        .edu-item {
+            margin-bottom: 8px;
+        }
+        .edu-item .degree {
+            font-weight: 600;
+            color: #444;
+        }
+        .edu-item .school {
+            color: #666;
+            font-size: 13px;
+        }
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 30px 40px;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>NEIL WU</h1>
+            <div class="title">Senior Solution Architect | Cloud &amp; Microservices | Java | Azure Kubernetes</div>
+            <div class="contact">
+                <span>Toronto, Ontario, Canada</span> |
+                <span>647-920-0756</span> |
+                <span>[your.email@example.com]</span> |
+                <span>[linkedin.com/in/yourprofile]</span>
+            </div>
+        </div>
+
+        <h2>Professional Summary</h2>
+        <p class="summary">
+            Results-driven Senior Solution Architect with 20+ years of enterprise software engineering experience and a proven track record leading large-scale system modernization initiatives. Expert in transforming legacy monolithic architectures into cloud-native microservices on Azure Kubernetes, optimizing system performance, and mentoring cross-functional engineering teams. Deep expertise across the full Java ecosystem from J2EE/WebLogic to modern Spring Boot 3, reactive systems (Play/Akka), and distributed NoSQL data stores. Skilled at bridging business objectives with technical execution through architectural standards, stakeholder workshops, and proof-of-concept development.
+        </p>
+
+        <h2>Core Competencies</h2>
+        <div class="skills-grid">
+            <div class="col">
+                <h3>Architecture &amp; Cloud</h3>
+                <p>Cloud-Native Architecture<br>Microservices Design<br>Azure Kubernetes Service (AKS)<br>System Integration &amp; APIs<br>Performance Optimization<br>Technical Leadership &amp; Mentoring</p>
+            </div>
+            <div class="col">
+                <h3>Backend &amp; Frameworks</h3>
+                <p>Java / J2EE / JDK 17<br>Spring Boot 2.x / 3.x<br>Play Framework / Akka<br>RESTful API Design<br>C / C++<br>WebLogic / WebSphere</p>
+            </div>
+            <div class="col">
+                <h3>Data &amp; DevOps</h3>
+                <p>Oracle, PostgreSQL<br>NoSQL (Cassandra)<br>Docker<br>Git / GitHub<br>CI/CD Pipelines</p>
+            </div>
+        </div>
+
+        <h2>Certifications</h2>
+        <ul class="cert-list">
+            <li>Sun Certified Java Programmer (SCJP)</li>
+            <li>Sun Certified Java Web Developer</li>
+            <li>IBM Certified System Administrator — WebSphere Application Server Network Deployment</li>
+        </ul>
+
+        <h2>Professional Experience</h2>
+
+        <div class="job">
+            <div class="job-header">
+                <span class="company">Rogers Communications</span>
+                <span class="location">Toronto, ON</span>
+            </div>
+            <div class="job-title-line">Senior Solution Architect | 2022 – Present</div>
+            <p class="job-desc">Lead architectural strategy for enterprise-scale application modernization, transitioning legacy Play/Akka monoliths to scalable microservices deployed on Azure Kubernetes.</p>
+            <ul>
+                <li>Architected and delivered a microservices platform using Spring Boot 3 and Azure Kubernetes, replacing standalone Play/Akka applications to improve scalability, deployment velocity, and system resilience.</li>
+                <li>Established architectural standards and best practices for solution delivery, ensuring consistency across 10+ engineering teams and reducing technical debt in new projects.</li>
+                <li>Evaluated and integrated emerging cloud-native technologies, enhancing system reliability and reducing infrastructure overhead.</li>
+                <li>Facilitated cross-functional workshops with product, engineering, and business stakeholders to align technical roadmaps with strategic business objectives.</li>
+                <li>Mentored and coached junior architects and senior engineers on distributed systems design, cloud patterns, and modern Java development methodologies.</li>
+                <li>Conducted architectural reviews and governance sessions to ensure all solutions met enterprise security, performance, and scalability requirements.</li>
+                <li>Developed prototypes and proof-of-concepts to de-risk technology adoption decisions before full-scale implementation.</li>
+            </ul>
+        </div>
+
+        <hr class="divider">
+
+        <div class="job">
+            <div class="job-header">
+                <span class="company">Rogers Communications</span>
+                <span class="location">Toronto, ON</span>
+            </div>
+            <div class="job-title-line">Senior Java Technical Lead | 2011 – 2022</div>
+            <p class="job-desc">Spearheaded backend engineering for both consumer-facing and internal retail platforms, evolving the technology stack from traditional J2EE to modern reactive systems over an 11-year tenure.</p>
+            <ul>
+                <li>Led backend development for rogers.com consumer portal (J2EE/WebLogic) and retail agent-facing applications (J2EE/WebLogic/Oracle), serving millions of Canadian subscribers.</li>
+                <li>Designed and built high-throughput REST APIs using Play Framework and Akka, powering single-page application (SPA) frontends with sub-second response times.</li>
+                <li>Architected session and caching layers using Apache Cassandra, replacing traditional relational session stores to support horizontal scalability and high availability.</li>
+                <li>Drove code quality initiatives through rigorous peer reviews, static analysis, and performance benchmarking, establishing team-wide standards that reduced production defects.</li>
+                <li>Monitored and optimized system performance metrics (latency, throughput, error rates), identifying bottlenecks and implementing tuning strategies that improved overall platform stability.</li>
+                <li>Mentored and upskilled junior and intermediate developers through pair programming, technical workshops, and structured knowledge-sharing sessions, building a high-performing engineering culture.</li>
+            </ul>
+        </div>
+
+        <hr class="divider">
+
+        <div class="job">
+            <div class="job-header">
+                <span class="company">Net Present Ltd.</span>
+                <span class="location">Toronto, ON</span>
+            </div>
+            <div class="job-title-line">Senior Java Developer | 2007 – 2011</div>
+            <p class="job-desc">Delivered robust enterprise Java applications for the online gaming industry, specializing in management systems, rapid defect resolution, and team technical enablement.</p>
+            <ul>
+                <li>Built a comprehensive Java-based management system for online casino operations, handling real-time transaction processing and reporting.</li>
+                <li>Debugged and resolved critical production defects under tight deadlines, ensuring 99.9%+ platform uptime during peak traffic periods.</li>
+                <li>Provided technical guidance to junior engineers on coding standards, design patterns, and version control best practices using Git/SVN.</li>
+                <li>Adapted applications rapidly to evolving market requirements and individual client demands, demonstrating strong business agility.</li>
+                <li>Maintained comprehensive technical documentation for software architectures, APIs, and development processes to support long-term maintainability.</li>
+            </ul>
+        </div>
+
+        <hr class="divider">
+
+        <div class="job">
+            <div class="job-header">
+                <span class="company">King Products Inc.</span>
+                <span class="location">Mississauga, ON</span>
+            </div>
+            <div class="job-title-line">Senior Java Developer | 2000 – 2007</div>
+            <p class="job-desc">Developed and maintained standalone Java applications supporting enterprise kiosk management systems across retail and commercial deployments.</p>
+            <ul>
+                <li>Engineered end-to-end Java applications for kiosk hardware integration, including device drivers, user interfaces, and remote management consoles.</li>
+                <li>Collaborated with hardware, QA, and operations teams to design integrated software solutions that met strict reliability and performance requirements.</li>
+                <li>Implemented code review processes and development best practices that improved software quality and reduced release cycle time.</li>
+                <li>Managed source code repositories and version control workflows, ensuring traceability and audit compliance across all releases.</li>
+            </ul>
+        </div>
+
+        <h2>Education</h2>
+        <div class="edu-list">
+            <div class="edu-item">
+                <span class="degree">Master of Science in Computer Science</span><br>
+                <span class="school">Northeast University of China</span>
+            </div>
+            <div class="edu-item">
+                <span class="degree">Bachelor of Science in Mathematics</span><br>
+                <span class="school">Inner Mongolia National University, China</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from services import ServiceManager
-from models.web import PasswordItem
+from models.web import PasswordItem, AppointmentItem
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.PasswordDataManager import singleton_config
+from db.AppointmentManager import singleton_appointment
 from utils.encryption import *
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -21,6 +22,7 @@ UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 singleton_config.create_table()
 singleton_config.create_table_backup()
+singleton_appointment.create_table()
 key = get_secret()
 print("secret_key=")
 print(key)
@@ -110,4 +112,31 @@ async def import_file(file: UploadFile = File(...)):
     ServiceManager.import_password(decrypted_string)
     return createResponse(ServiceManager.list_users())
 
+@app.post("/appointment/create")
+async def create_appointment(item: AppointmentItem):
+    print("Create appointment started")
+    # Convert Pydantic model to a standard dictionary
+    item_dict = item.model_dump()
+    print("create_appointment,item_dict=",item_dict)
+    ServiceManager.create_appointment(item_dict)
+    return createResponse(ServiceManager.list_appointment_by_date(item_dict["name"],item_dict["start_date"]))
 
+@app.get("/appointment/list/{name}/{start_date}")
+async def list_appointment(name,start_date):
+    return createResponse(ServiceManager.list_appointment_by_date(name,start_date))
+
+@app.get("/appointment/list-month/{name}/{start_month}")
+async def list_appointment_by_month(name,start_month):
+    return createResponse(ServiceManager.list_appointment_by_month(name,start_month))
+
+@app.get("/appointment/delete/{name}/{start_date}")
+async def delete_appointment_by_date(name,start_date):
+    print("Delete appointment by date")
+    ServiceManager.delete_appointment_by_date(name,start_date)
+    return createResponse(ServiceManager.list_appointment_by_date(name,start_date))
+
+@app.get("/appointment/delete/{name}/{start_date}/{start_time}")
+async def delete_appointment_by_datetime(name,start_date,start_time):
+    print("Delete appointment by date")
+    ServiceManager.delete_appointment_by_datetime(name,start_date,start_time)
+    return createResponse(ServiceManager.list_appointment_by_date(name,start_date))

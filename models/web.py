@@ -6,3 +6,9 @@ class PasswordItem(BaseModel):
     username: str
     password: str
     description: str | None = None
+class AppointmentItem(BaseModel):
+    name: str
+    start_date: str
+    start_time: str
+    end_time: str
+    event: str | None = None
