@@ -36,6 +36,7 @@ class AppointmentDataManager:
                     start_time TEXT NOT NULL,
                     end_time TEXT NOT NULL,
                     event TEXT NOT NULL,
+                    info TEXT,
                     PRIMARY KEY (name,start_month,start_date, start_time)
                 );
             """)
@@ -46,15 +47,15 @@ class AppointmentDataManager:
         print("add-start-month==" + start_month)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            INSERT INTO appointment(name,start_month,start_date,start_time,end_time,event)
-            VALUES (%s,%s,%s,%s,%s,%s)
-            """, (name,start_month,start_date,start_time, end_time, event))
+            INSERT INTO appointment(name,start_month,start_date,start_time,end_time,event,info)
+            VALUES (%s,%s,%s,%s,%s,%s,%s)
+            """, (name,start_month,start_date,start_time, end_time, event,"info"))
             self.connection.commit()
     def retrieve_appointment_by_date(self, name,start_date):
         print("Query password table with key=" + start_date)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT start_date,start_time,end_time,event FROM appointment WHERE name = %s and start_date = %s order by start_time
+            SELECT start_date,start_time,end_time,event,info FROM appointment WHERE name = %s and start_date = %s order by start_time
             """,(name,start_date,))
             # rows = cursor.fetchall()
             # for row in rows:
@@ -63,12 +64,12 @@ class AppointmentDataManager:
                 return None
             else:
                 records = cursor.fetchall()
-                return self.convert_to_list(("start_date","start_time","end_time","event"),records)
+                return self.convert_to_list(("start_date","start_time","end_time","event","info"),records)
     def retrieve_appointment_by_month(self, name,start_month):
         print("Query password table with key=" + start_month)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT start_date,start_time,end_time,event FROM appointment WHERE name = %s and start_month = %s order by start_date
+            SELECT start_date,start_time,end_time,event,info FROM appointment WHERE name = %s and start_month = %s order by start_date
             """,(name,start_month,))
             # rows = cursor.fetchall()
             # for row in rows:
@@ -77,7 +78,7 @@ class AppointmentDataManager:
                 return None
             else:
                 records = cursor.fetchall()
-                return self.convert_to_list(("start_date","start_time","end_time","event"),records)
+                return self.convert_to_list(("start_date","start_time","end_time","event","info"),records)
     def delete_appointment_by_date(self, name,start_date):
         with self.connection.cursor() as cursor:
             cursor.execute("""
