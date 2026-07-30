@@ -37,25 +37,36 @@ class AppointmentDataManager:
                     end_time TEXT NOT NULL,
                     event TEXT NOT NULL,
                     info TEXT,
+                    phone TEXT,
                     PRIMARY KEY (name,start_month,start_date, start_time)
                 );
             """)
             self.connection.commit()  # Commit changes to save them
         print("Table p assword Successfully created.")
-    def add_appointment(self, name,start_date,start_time, end_time, event):
+    def add_appointment(self, name,start_date,start_time, end_time, event,info,phone):
         start_month = start_date[0:7]
         print("add-start-month==" + start_month)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            INSERT INTO appointment(name,start_month,start_date,start_time,end_time,event,info)
-            VALUES (%s,%s,%s,%s,%s,%s,%s)
-            """, (name,start_month,start_date,start_time, end_time, event,"info"))
+            INSERT INTO appointment(name,start_month,start_date,start_time,end_time,event,info,phone)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (name,start_month,start_date,start_time, end_time, event,info,phone))
+            self.connection.commit()
+    def update_appointment(self, name,start_date,start_time, event,info,phone):
+        print("update_appointment-db")
+        start_month = start_date[0:7]
+        print("update-start-month==" + start_month)
+        with self.connection.cursor() as cursor:
+            cursor.execute("""
+            UPDATE appointment set event = %s,info = %s,phone=%s
+            WHERE name = %s and start_month = %s and start_date = %s and start_time = %s
+            """, (event,info,phone,name,start_month,start_date,start_time))
             self.connection.commit()
     def retrieve_appointment_by_date(self, name,start_date):
         print("Query password table with key=" + start_date)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT start_date,start_time,end_time,event,info FROM appointment WHERE name = %s and start_date = %s order by start_time
+            SELECT start_date,start_time,end_time,event,info,phone FROM appointment WHERE name = %s and start_date = %s order by start_time
             """,(name,start_date,))
             # rows = cursor.fetchall()
             # for row in rows:
@@ -64,12 +75,12 @@ class AppointmentDataManager:
                 return None
             else:
                 records = cursor.fetchall()
-                return self.convert_to_list(("start_date","start_time","end_time","event","info"),records)
+                return self.convert_to_list(("start_date","start_time","end_time","event","info","phone"),records)
     def retrieve_appointment_by_month(self, name,start_month):
         print("Query password table with key=" + start_month)
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            SELECT start_date,start_time,end_time,event,info FROM appointment WHERE name = %s and start_month = %s order by start_date
+            SELECT start_date,start_time,end_time,event,info,phone FROM appointment WHERE name = %s and start_month = %s order by start_date
             """,(name,start_month,))
             # rows = cursor.fetchall()
             # for row in rows:
@@ -78,7 +89,7 @@ class AppointmentDataManager:
                 return None
             else:
                 records = cursor.fetchall()
-                return self.convert_to_list(("start_date","start_time","end_time","event","info"),records)
+                return self.convert_to_list(("start_date","start_time","end_time","event","info","phone"),records)
     def delete_appointment_by_date(self, name,start_date):
         with self.connection.cursor() as cursor:
             cursor.execute("""

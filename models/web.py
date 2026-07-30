@@ -12,3 +12,5 @@ class AppointmentItem(BaseModel):
     start_time: str
     end_time: str
     event: str | None = None
+    info: str | None = None
+    phone: str | None = None

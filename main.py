@@ -121,6 +121,14 @@ async def create_appointment(item: AppointmentItem):
     ServiceManager.create_appointment(item_dict)
     return createResponse(ServiceManager.list_appointment_by_date(item_dict["name"],item_dict["start_date"]))
 
+@app.post("/appointment/update")
+async def update_appointment(item: AppointmentItem):
+    print("update_appointment-web")
+    # Convert Pydantic model to a standard dictionary
+    item_dict = item.model_dump()
+    ServiceManager.update_appointment(item_dict)
+    return createResponse(ServiceManager.list_appointment_by_date(item_dict["name"],item_dict["start_date"]))
+
 @app.get("/appointment/list/{name}/{start_date}")
 async def list_appointment(name,start_date):
     return createResponse(ServiceManager.list_appointment_by_date(name,start_date))

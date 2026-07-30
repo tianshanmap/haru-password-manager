@@ -34,6 +34,9 @@ def import_password(content):
 
 def create_appointment(item) -> str:
     return AppointmentServiceByDB.create_appointment(item)
+def update_appointment(item) -> str:
+    print("update_appointment-service")
+    return AppointmentServiceByDB.update_appointment(item)
 def delete_appointment_by_date(name,start_date: str):
     return AppointmentServiceByDB.delete_appointment_date(name,start_date)
 def delete_appointment_by_datetime(name,start_date: str,start_time):
