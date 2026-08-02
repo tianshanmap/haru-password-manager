@@ -3,14 +3,19 @@ import psycopg
 # Define your connection string
 class PasswordDataManager:
     def __init__(self):
+        print("Instance is created successfully")
+
+    def start(self,host="localhost",user="developer",password="meiyou",dbname="tianshan",port=5432):
         self.connection = psycopg.connect(
-            host="localhost",
-            dbname="tianshan",
-            user="developer",
-            password="meiyou",
-            port=5432
+            # host="host.docker.internal",
+            host=host,
+            dbname=dbname,
+            user=user,
+            password=password,
+            port=port
         )
-        print("Successfully connected to PostgreSQL.")
+        self.create_table()
+        self.create_table_backup()
     def close(self):
         self.connection.close()
         print("Successfully closed connection to PostgreSQL.")
@@ -96,7 +101,7 @@ class PasswordDataManager:
             cursor.execute("""
             DELETE FROM {}
             """.format(table))
-            self.connection.commit()
+        self.connection.commit()
 
 # Instantiate the single, shared instance here
 singleton_config = PasswordDataManager()

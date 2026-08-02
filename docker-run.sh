@@ -1,0 +1,1 @@
+docker run --env-file .env --add-host=host.docker.internal:host-gateway -p 9083:8000 data_manager

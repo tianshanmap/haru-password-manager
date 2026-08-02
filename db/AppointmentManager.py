@@ -3,14 +3,17 @@ import psycopg
 # Define your connection string
 class AppointmentDataManager:
     def __init__(self):
+        print("Instance is created successfully.")
+    def start(self,host="localhost",user="developer",password="meiyou",dbname="tianshan",port=5432):
         self.connection = psycopg.connect(
-            host="localhost",
-            dbname="tianshan",
-            user="developer",
-            password="meiyou",
-            port=5432
+            # host="host.docker.internal",
+            host=host,
+            dbname=dbname,
+            user=user,
+            password=password,
+            port=port
         )
-        print("Successfully connected to PostgreSQL.")
+        self.create_table()
     def close(self):
         self.connection.close()
         print("Successfully closed connection to PostgreSQL.")

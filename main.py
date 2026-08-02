@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from services import ServiceManager
 from models.web import PasswordItem, AppointmentItem
@@ -9,8 +11,12 @@ from utils.encryption import *
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, FastAPI
 import utils.files
 app = FastAPI()
+router = APIRouter()
+# 2. Create a router and set your prefix here
+app.include_router(router, prefix="/api/data-manager")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,9 +26,16 @@ app.add_middleware(
 )
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
-singleton_config.create_table()
-singleton_config.create_table_backup()
-singleton_appointment.create_table()
+
+POSTGRESQL_USER = os.getenv("POSTGRESQL_USER")
+POSTGRESQL_PASSWORD = os.getenv("POSTGRESQL_PASSWORD")
+POSTGRESQL_HOST = os.getenv("POSTGRESQL_HOST")
+POSTGRESQL_PORT = os.getenv("POSTGRESQL_PORT")
+POSTGRESQL_DB = os.getenv("POSTGRESQL_DB")
+
+singleton_config.start(POSTGRESQL_HOST,POSTGRESQL_USER,POSTGRESQL_PASSWORD,POSTGRESQL_DB,POSTGRESQL_PORT)
+singleton_appointment.start(POSTGRESQL_HOST,POSTGRESQL_USER,POSTGRESQL_PASSWORD,POSTGRESQL_DB,POSTGRESQL_PORT)
+
 key = get_secret()
 print("secret_key=")
 print(key)
@@ -44,7 +57,7 @@ def createResponse(content,contentType="application/json"):
     return JSONResponse(content=content, headers=headers)
 
 
-@app.post("/password/create")
+@router.post("/password/create")
 async def create_password(item: PasswordItem):
     print("Create Password")
     # Convert Pydantic model to a standard dictionary
@@ -53,7 +66,7 @@ async def create_password(item: PasswordItem):
     ServiceManager.create_user(item_dict)
     return createResponse(ServiceManager.list_users())
 
-@app.post("/password/update")
+@router.post("/password/update")
 async def update_password(item: PasswordItem):
     print("Update Password")
     # Convert Pydantic model to a standard dictionary
@@ -62,22 +75,22 @@ async def update_password(item: PasswordItem):
     ServiceManager.update_user(item_dict)
     return createResponse(ServiceManager.list_users())
 
-@app.get("/password/list")
+@router.get("/password/list")
 async def list_password():
     return createResponse(ServiceManager.list_users())
 
-@app.get("/password/purge/{key}")
+@router.get("/password/purge/{key}")
 async def delete_password(key: str):
     print("Delete Password")
     ServiceManager.delete_user(key)
     return createResponse(ServiceManager.list_users())
 
-@app.get("/password/backup")
+@router.get("/password/backup")
 async def backup_password():
     ServiceManager.backup()
     return createResponse(ServiceManager.list_users())
 
-@app.get("/password/export")
+@router.get("/password/export")
 async def export_password():
     password = ServiceManager.export_password()
     password = encrypt_string(get_secret(), password)
@@ -94,7 +107,7 @@ async def export_password():
         media_type="application/octet-stream"
     )
 
-@app.post("/password/import")
+@router.post("/password/import")
 async def import_file(file: UploadFile = File(...)):
     # Optional: Validate file extensions/types
     print(file.content_type)
@@ -112,7 +125,7 @@ async def import_file(file: UploadFile = File(...)):
     ServiceManager.import_password(decrypted_string)
     return createResponse(ServiceManager.list_users())
 
-@app.post("/appointment/create")
+@router.post("/appointment/create")
 async def create_appointment(item: AppointmentItem):
     print("Create appointment started")
     # Convert Pydantic model to a standard dictionary
@@ -121,7 +134,7 @@ async def create_appointment(item: AppointmentItem):
     ServiceManager.create_appointment(item_dict)
     return createResponse(ServiceManager.list_appointment_by_date(item_dict["name"],item_dict["start_date"]))
 
-@app.post("/appointment/update")
+@router.post("/appointment/update")
 async def update_appointment(item: AppointmentItem):
     print("update_appointment-web")
     # Convert Pydantic model to a standard dictionary
@@ -129,21 +142,21 @@ async def update_appointment(item: AppointmentItem):
     ServiceManager.update_appointment(item_dict)
     return createResponse(ServiceManager.list_appointment_by_date(item_dict["name"],item_dict["start_date"]))
 
-@app.get("/appointment/list/{name}/{start_date}")
+@router.get("/appointment/list/{name}/{start_date}")
 async def list_appointment(name,start_date):
     return createResponse(ServiceManager.list_appointment_by_date(name,start_date))
 
-@app.get("/appointment/list-month/{name}/{start_month}")
+@router.get("/appointment/list-month/{name}/{start_month}")
 async def list_appointment_by_month(name,start_month):
     return createResponse(ServiceManager.list_appointment_by_month(name,start_month))
 
-@app.get("/appointment/delete/{name}/{start_date}")
+@router.get("/appointment/delete/{name}/{start_date}")
 async def delete_appointment_by_date(name,start_date):
     print("Delete appointment by date")
     ServiceManager.delete_appointment_by_date(name,start_date)
     return createResponse(ServiceManager.list_appointment_by_date(name,start_date))
 
-@app.get("/appointment/delete/{name}/{start_date}/{start_time}")
+@router.get("/appointment/delete/{name}/{start_date}/{start_time}")
 async def delete_appointment_by_datetime(name,start_date,start_time):
     print("Delete appointment by date")
     ServiceManager.delete_appointment_by_datetime(name,start_date,start_time)

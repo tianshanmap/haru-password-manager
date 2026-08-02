@@ -1,0 +1,1 @@
+kind load docker-image data_manager:latest --name tianshan
